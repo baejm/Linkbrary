@@ -1,0 +1,24 @@
+.gnb {
+  width: 100%;
+  padding: 46px 0;
+}
+
+.gnb_top {
+  max-width: 1040px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin: 0 auto;
+}
+
+.gnb_top h1 {
+  width: 133px;
+  height: 24px;
+}
+.gnb_top button {
+  color: var(--white);
+  background: #2c2c2c;
+}
+.gnb_top h1 img {
+  width: 100%;
+}

@@ -1,0 +1,13 @@
+.landing_wrap {
+  max-width: 1440px;
+  width: 100%;
+  margin: 0 auto;
+  font-size: 0;
+}
+.landing_wrap section {
+  width: 100%;
+}
+.landing_wrap section img {
+  width: 100% !important;
+  height: auto !important;
+}
