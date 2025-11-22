@@ -1,0 +1,20 @@
+.header_wrap {
+  background: url("/images/header_bg.png") no-repeat 0 0 / cover;
+}
+.header_wrap_big {
+  background: url("/images/header_bg_big.png") no-repeat 0 0 / cover;
+  text-align: center;
+  /* min-height: 608px; */
+  max-height: 1040px;
+  height: 72.22225vw;
+  max-width: 1440;
+  margin: 0 auto;
+}
+.header_wrap_big .txt_56_b {
+  display: block;
+}
+.title {
+  color: var(--white);
+  text-align: center;
+  margin: 20px 0 40px;
+}
