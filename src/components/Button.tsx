@@ -6,9 +6,12 @@ interface ButtonProps {
   size?: "sm" | "md" | "lg" | "full";
   color?: string;
   ico?: boolean;
+  num?: number;
   className?: string;
+  disabled?: boolean;
   onClick?: () => void;
   type?: "button" | "submit";
+  style?: React.CSSProperties;
 }
 
 export default function Button({
@@ -17,6 +20,8 @@ export default function Button({
   color = "white",
   ico = false,
   className,
+  disabled,
+  num,
   ...props
 }: ButtonProps) {
   return (
@@ -28,9 +33,11 @@ export default function Button({
         ico && style.ico,
         className
       )}
+      disabled={disabled}
       {...props}
     >
       {children}
+      {<span className={style.num}>{num}</span>}
     </button>
   );
 }

@@ -1,0 +1,76 @@
+.overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.4);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 2000;
+}
+
+.modalBox {
+  background: white;
+  width: 360px;
+  padding: 24px;
+  border-radius: 16px;
+  position: relative;
+}
+
+.close {
+  position: absolute;
+  top: 14px;
+  right: 14px;
+  border: none;
+  background: none;
+  font-size: 22px;
+  cursor: pointer;
+}
+
+.title {
+  text-align: center;
+  margin-bottom: 10px;
+}
+
+.linkText {
+  text-align: center;
+  font-size: 14px;
+  color: #777;
+  margin-bottom: 20px;
+}
+
+.folderList {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  margin-bottom: 20px;
+}
+
+.folderItem {
+  width: 100%;
+  padding: 14px 10px;
+  border-radius: 10px;
+  background: #f7f7f7;
+  border: 1px solid transparent;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.folderItem span {
+  font-size: 12px;
+  color: #888;
+}
+
+.folderItem.active {
+  border-color: #000;
+  background: #eee;
+}
+
+.check {
+  color: black;
+  margin-left: 8px;
+}
+
+.submit {
+  width: 100%;
+}
