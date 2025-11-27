@@ -1,21 +1,32 @@
-export async function fetchApi(path: string, options: RequestInit = {}) {
-  const url = `
-  ${process.env.NEXT_PUBLIC_API_BASE_URL}/
-  ${process.env.NEXT_PUBLIC_TEAM_ID}/
-  ${path}  
-  `;
+// lib/api.ts
+import { getToken, logoutAll } from "./token";
 
-  const response = await fetch(url, {
+export async function fetchApi(path: string, options: RequestInit = {}) {
+  const base = process.env.NEXT_PUBLIC_API_BASE_URL;
+  const teamId = process.env.NEXT_PUBLIC_TEAM_ID;
+  const token = getToken();
+
+  const res = await fetch(`${base}/${teamId}${path}`, {
+    method: options.method || "GET",
     headers: {
-      "Content-type": "application/json",
+      "Content-Type": "application/json",
+      ...(token ? { Authorization: `Bearer ${token}` } : {}),
       ...(options.headers || {}),
     },
-    ...options,
+    body: options.body,
   });
 
-  if (!response.ok) {
-    const errorData = await response.json().catch(() => ({}));
-    throw new Error(errorData.message || "API 에러났어요");
+  const txt = await res.text();
+  let json: any = {};
+  try {
+    json = txt ? JSON.parse(txt) : {};
+  } catch {}
+
+  if (res.status === 401) {
+    logoutAll();
+    throw { status: 401 };
   }
-  return response.json();
+  if (!res.ok) throw { status: res.status, body: json };
+
+  return json;
 }

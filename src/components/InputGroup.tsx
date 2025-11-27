@@ -4,7 +4,7 @@ import { clsx } from "clsx";
 import Input from "./Input";
 import Button from "./Button";
 import style from "./inputGroup.module.css";
-import { InputSize } from "./type";
+import { InputSize } from "../../types/type";
 
 interface InputGroupProps {
   input: React.ComponentProps<typeof Input>;

@@ -1,18 +1,30 @@
 .input_wrap {
   width: 100%;
   position: relative;
+  /* display: flex; */
+  align-items: center;
 }
 
 .input {
   width: 100%;
   padding: 12px 16px;
-  border-radius: 44px;
   background: #fff;
+  border: 1px solid var(--gray-400);
+  border-radius: 10px;
+  font-size: 16px;
+  outline: none;
+  transition: all 0.2s ease;
 }
-.input_sm {
+
+.input:focus {
+  border-color: var(--gray-600);
+}
+
+.input_sm .input {
   height: 54px;
 }
-.input_lg {
+
+.input_lg .input {
   height: 77px;
   border-radius: 44px;
   background: none;
@@ -22,22 +34,58 @@
   color: var(--gray-400);
 }
 
+.input_login .input {
+  width: 100%;
+  padding: 14px;
+  border-radius: 10px;
+  background: #1e1e1e;
+  border: 1px solid var(--gray-500);
+  color: white;
+  height: 54px;
+}
+
+.input_search {
+  position: relative;
+  max-width: 1040px;
+  margin: 0 auto;
+  margin-bottom: 48px;
+}
+.input_search .input {
+  position: relative;
+  width: 100%;
+  border-radius: 30px;
+  border: none;
+  background: var(--gray-100);
+  padding-left: 52px;
+}
+
 .icon_left,
 .icon_right {
   position: absolute;
   top: 50%;
   transform: translateY(-50%);
   cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
   z-index: 102;
 }
 
 .icon_left {
-  left: 32px;
-  width: 28px;
-  height: 28px;
-  display: block;
+  left: 24px;
 }
 
 .icon_right {
-  right: 14px;
+  right: 20px;
+}
+
+.errorBorder {
+  border: 1px solid rgba(255, 50, 53, 1) !important;
+}
+
+.errorText {
+  text-align: left;
+  margin-top: 8px;
+  font-size: 14px;
+  color: rgba(255, 50, 53, 1);
 }
