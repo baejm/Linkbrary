@@ -1,15 +1,24 @@
 "use client";
 
-import { createContext, useContext, useState } from "react";
+import { createContext, ReactNode, useContext, useState } from "react";
 import { ModalState, ModalType } from "../../../types/type";
 import ModalLayout from "./ModalLayout";
 import AddFolderModal from "./AddFolderModal";
 import EditLinkModal from "./EditLinkModal";
-import AddLinkToFolderModal from "./AddLinkToFolderModal"; // 🔥 추가
+import AddLinkToFolderModal from "./AddLinkToFolderModal";
+interface ModalProviderProps {
+  children: ReactNode;
+}
 
-const ModalContext = createContext<any>(null);
+interface ModalContextValue {
+  modal: ModalState;
+  openModal: (type: ModalType, data?: any) => void;
+  closeModal: () => void;
+}
 
-export function ModalProvider({ children }) {
+const ModalContext = createContext<ModalContextValue | null>(null);
+
+export function ModalProvider({ children }: ModalProviderProps) {
   const [modal, setModal] = useState<ModalState>({ type: null });
 
   const openModal = (type: ModalType, data?: any) => {
@@ -21,7 +30,7 @@ export function ModalProvider({ children }) {
   };
 
   return (
-    <ModalContext.Provider value={{ openModal, closeModal }}>
+    <ModalContext.Provider value={{ modal, openModal, closeModal }}>
       {children}
 
       {/* 전역 모달 렌더링 */}
