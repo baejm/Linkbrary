@@ -1,4 +1,3 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
 
 ## Getting Started
 
@@ -14,23 +13,99 @@ pnpm dev
 bun dev
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+Open [http://localhost:3000]([http://localhost:3000](https://linkbrary-gilt.vercel.app/)) with your browser to see the result.
+Frontend
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+Next.js 14(App Router) / React 18
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+React Query(TanStack Query) – 서버 상태 관리, Optimistic Update
 
-## Learn More
+TypeScript – 타입 안전성 확보
 
-To learn more about Next.js, take a look at the following resources:
+React Hooks: useState, useEffect, useRef, useSearchParams, useRouter
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+Dynamic Routing, Client Components, Suspense Boundary 적용
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+React Query 글로벌 캐싱 & 쿼리 무효화(invalidateQueries)
 
-## Deploy on Vercel
+Optimistic UI 업데이트(즐겨찾기 토글)
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+Custom Hooks(useLinks, useFolders, useDebounce)
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+Pagination 구현 (클라이언트 사이드 페이지네이션)
+
+Debounce 검색 기능 구현
+
+Error & Loading 상태 관리
+
+UI 구성요소 모듈화(LinkCard, FolderHeader, Pagination 등)
+
+API & Auth
+
+JWT 기반 인증 처리
+
+Access Token 만료 시 강제 로그아웃 처리
+
+fetch wrapper 함수(fetchApi) 커스터마이징
+
+REST API 기반 CRUD 구현 (폴더, 링크, 즐겨찾기)
+
+Favorite API 연동 & PUT 메서드 적용
+
+UI / UX
+
+Skeleton Loading UI
+
+Empty State 화면 구성
+
+모달 UI(폴더 수정/삭제/추가)
+
+Optimistic Update로 즉시 반응하는 UX 구성
+
+이미지 썸네일 처리 + Next/Image 최적화
+
+State & Business Logic
+
+React Query Mutations
+
+Folder/Links 상태 관리 분리
+
+리스트 필터링 및 검색
+
+클라이언트 사이드 파라미터 기반 UI 동기화
+
+기타 기술
+
+Vercel 배포
+
+Git / GitHub 협업
+
+ESLint / Prettier 설정
+
+파일 구조 설계(feature-based structure)
+
+TypeScript Domain Type 정의(LinkItem, Response 타입 등)
+
+
+
+1. React Query를 이용한 서버 상태 관리
+useQuery / useMutation 활용
+Links와 Favorites의 캐싱을 분리하여 각 페이지 성능 최적화
+성공 시 invalidateQueries로 전체 데이터 싱크 유지
+
+2. Optimistic Update로 즉각적인 UI 반영
+즐겨찾기 토글 시 서버 응답 전에도 UI가 즉시 반응
+
+3. Custom Hook으로 관심사 분리
+useLinks(folderId)
+useFolders()
+useDebounce(value)
+
+URL SearchParams를 통한 상태 동기화
+폴더 선택, router.push(/links?folder=${id}) ,새로고침해도 상태 유지
+
+5. Suspense Boundary로 CSR 관련 에러 해결
+useSearchParams 사용 시 발생하는 CSR bail-out 문제 해결
+
+
+
