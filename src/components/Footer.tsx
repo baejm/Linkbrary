@@ -9,7 +9,7 @@ import Link from "next/link";
 
 const Footer = () => {
   return (
-    <div className="footer_wrap">
+    <footer className="footer_wrap">
       <div className="footer_list  txt_16_r">
         <p className="txt">©codeit - 2025</p>
         <ul className="desc">
@@ -60,7 +60,7 @@ const Footer = () => {
           </li>
         </ul>
       </div>
-    </div>
+    </footer>
   );
 };
 

@@ -14,7 +14,7 @@ export default function RootLayout({
     <html lang="ko">
       <body>
         <Toaster position="top-center" reverseOrder={false} />
-        {children}
+        <div className="layouts">{children}</div>
       </body>
     </html>
   );

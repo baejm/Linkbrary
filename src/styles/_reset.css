@@ -871,3 +871,9 @@ body.scroll-hidden {
 /* 모바일 */
 @media screen and (max-width: 768px) {
 }
+
+.layouts {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+}
