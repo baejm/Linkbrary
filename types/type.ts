@@ -6,10 +6,11 @@ export type ModalType =
   | "deleteLink"
   | "editFolder"
   | "addLinkToFolder"
+  | "confirmDelete"
   | null;
 
 export interface ModalState {
-  type: ModalType;
+  type: ModalType | null;
   data?: any | null;
 }
 

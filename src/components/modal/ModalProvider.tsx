@@ -6,6 +6,7 @@ import ModalLayout from "./ModalLayout";
 import AddFolderModal from "./AddFolderModal";
 import EditLinkModal from "./EditLinkModal";
 import AddLinkToFolderModal from "./AddLinkToFolderModal";
+import ConfirmModal from "./ConfirmModal";
 interface ModalProviderProps {
   children: ReactNode;
 }
@@ -59,10 +60,24 @@ export function ModalProvider({ children }: ModalProviderProps) {
               onClose={closeModal}
             />
           )}
+
+          {modal.type === "confirmDelete" && (
+            <ConfirmModal
+              message={modal.data?.message}
+              onConfirm={modal.data?.onConfirm}
+              onClose={closeModal}
+            />
+          )}
         </ModalLayout>
       )}
     </ModalContext.Provider>
   );
 }
 
-export const useModal = () => useContext(ModalContext);
+export const useModal = () => {
+  const context = useContext(ModalContext);
+  if (!context) {
+    throw new Error("ModalProvider를 사용하세욤");
+  }
+  return context;
+};

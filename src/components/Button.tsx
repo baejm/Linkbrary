@@ -37,7 +37,7 @@ export default function Button({
       {...props}
     >
       {children}
-      {<span className={style.num}>{num}</span>}
+      {num != null && <span className={style.num}>{num}</span>}
     </button>
   );
 }

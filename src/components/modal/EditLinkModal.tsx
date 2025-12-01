@@ -11,15 +11,15 @@ export default function EditLinkModal({
   initialUrl,
   onSubmit,
 }: EditLinkModalProps) {
-  const [url, setUrl] = useState(initialUrl);
+  const [url, setUrl] = useState(initialUrl ?? "");
 
   return (
     <ModalLayout onClose={onClose}>
       <h2>링크 수정</h2>
 
       <Input
-        value={url}
-        placeholder="https://"
+        value={url ?? ""}
+        placeholder={initialUrl || "주소를 입력해 주세요."}
         onChange={(e) => setUrl(e.target.value)}
       />
 

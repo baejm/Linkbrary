@@ -63,6 +63,10 @@
   color: var(--black);
   background: var(--white);
 }
+/* 로그아웃용 */
+.sm.trans {
+  background: none;
+}
 .list {
   border: 1px solid var(--gray-300);
   color: var(--black);
