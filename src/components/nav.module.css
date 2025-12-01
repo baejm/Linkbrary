@@ -22,3 +22,37 @@
 .gnb_top h1 img {
   width: 100%;
 }
+
+.header {
+  display: flex;
+  align-items: center;
+  margin-right: 10px;
+}
+
+.user_info {
+  color: var(--white);
+  margin-left: 20px;
+  display: flex;
+  align-items: center;
+  margin-right: 5px;
+}
+.user_info img {
+  width: 20px;
+  margin-right: 5px;
+}
+.nav_info {
+  position: absolute;
+  display: flex;
+  right: 5px;
+  top: 10px;
+  align-items: center;
+}
+.session_warning {
+  color: var(--white);
+  font-size: 12px;
+}
+.logout {
+  position: relative;
+  color: var(--gray-500) !important;
+  font-size: 12px !important;
+}

@@ -1,0 +1,30 @@
+.modal {
+  background: #fff;
+  padding: 20px;
+  border-radius: 12px;
+  min-width: 260px;
+}
+
+.message {
+  margin-bottom: 16px;
+  font-size: 15px;
+}
+
+.actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 10px;
+}
+
+.cancel {
+  background: #eee;
+  padding: 6px 12px;
+  border-radius: 6px;
+}
+
+.danger {
+  background: #ff4d4f;
+  color: white;
+  padding: 6px 12px;
+  border-radius: 6px;
+}

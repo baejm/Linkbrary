@@ -1,8 +1,8 @@
 import "@/styles/globals.css";
-import { Providers } from "./providers";
+import { Toaster } from "react-hot-toast";
 
 export const metadata = {
-  title: "My App",
+  title: "⭐ 즐겨찾기 리스트",
 };
 
 export default function RootLayout({
@@ -13,7 +13,8 @@ export default function RootLayout({
   return (
     <html lang="ko">
       <body>
-        <Providers>{children}</Providers>
+        <Toaster position="top-center" reverseOrder={false} />
+        {children}
       </body>
     </html>
   );

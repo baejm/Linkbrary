@@ -1,5 +1,12 @@
 "use client";
-
+declare module "next-auth" {
+  interface Session {
+    appToken?: string | null;
+    token?: {
+      access_token?: string | null;
+    };
+  }
+}
 import { useState } from "react";
 import { fetchApi } from "@/lib/api";
 import EmptyState from "@/components/EmptyState";
@@ -19,6 +26,16 @@ import { LoadingSpinner } from "@/components/loading/LoadingSpinner";
 
 import { useFolders } from "@/hooks/useFolders";
 import { useLinks } from "@/hooks/useLinks";
+import { useDebounce } from "@/hooks/useDebounce";
+import Pagination from "@/components/Pagination";
+// import { useSession } from "next-auth/react";
+
+interface LinksPageProps {
+  searchParams: {
+    folder?: string;
+    name?: string;
+  };
+}
 
 export default function LinksPage() {
   const [searchLink, setsearchLink] = useState("");
@@ -26,31 +43,52 @@ export default function LinksPage() {
     "all"
   );
 
+  const debounceSearch = useDebounce(searchLink); //검색어 디반스용
+
+  const searchParams = useSearchParams();
   const { openModal, closeModal } = useModal();
   const router = useRouter();
 
-  const searchParams = useSearchParams();
   const folderId = searchParams.get("folder");
-  const folderName = searchParams.get("name") || "";
+  const folderName = searchParams.get("name");
 
   const {
     data: folders,
     isLoading: foldersLoading,
     isFetching: foldersFetching,
     refetch: refetchFolders,
-  } = useFolders();
+  } = useFolders(); // 전체폴더
 
   const {
     data: linksData,
     isLoading: linksLoading,
     isFetching: linksFetching,
     refetch: refetchLinks,
-  } = useLinks(folderId);
+  } = useLinks(folderId); // 특정 폴더
 
-  const { data: allLinksData } = useLinks(null);
-  const allTotalCount = allLinksData?.totalCount ?? 0;
+  const { data: allLinksData } = useLinks(null); //전체 링크들
+  const allTotalCount = allLinksData?.totalCount ?? 0; // 전체 링크수 확인
 
   const links = linksData?.list ?? [];
+
+  const filterLinks = links.filter((item) => {
+    if (!debounceSearch) return true;
+    const text = debounceSearch.toLowerCase();
+
+    return (
+      item.url?.toLowerCase().includes(text) ||
+      item.title?.toLowerCase().includes(text) ||
+      item.description?.toLowerCase().includes(text)
+    );
+  });
+
+  //페이지네이션 관련
+  const [currentPage, setCurrentPage] = useState(1);
+  const itemsPerPage = 2;
+
+  const start = (currentPage - 1) * itemsPerPage;
+  const end = start + itemsPerPage;
+  const paginatedLinks = filterLinks.slice(start, end);
 
   /** 폴더 선택 */
   const handleSelectFolder = (id: number | string) => {
@@ -67,10 +105,16 @@ export default function LinksPage() {
 
   /** 폴더 삭제 */
   const handleDeleteFolder = async (folderId: string) => {
-    await fetchApi(`/folders/${folderId}`, { method: "DELETE" });
-    router.push("/links");
-    refetchFolders();
-    refetchLinks();
+    openModal("confirmDelete", {
+      message: "정말 삭제하시겠어요?",
+      onConfirm: async () => {
+        await fetchApi(`/folders/${folderId}`, { method: "DELETE" });
+        router.push("/links");
+        refetchFolders();
+        refetchLinks();
+        closeModal();
+      },
+    });
   };
 
   /** 폴더 이름 변경 */
@@ -117,7 +161,6 @@ export default function LinksPage() {
         value={searchLink}
         onChange={(e) => setsearchLink(e.target.value)}
       />
-
       {/* 폴더 리스트 */}
       <div className={clsx(styles.list_wrap)}>
         <ul>
@@ -153,19 +196,17 @@ export default function LinksPage() {
 
         <Button ico color="white" onClick={handleAddFolder}>
           <Image src={more} alt="" />
-          폴더 추가하기
+          &nbsp; 폴더 추가하기
         </Button>
       </div>
-
       {folderId && (
         <FolderHeader
           folderId={folderId}
-          folderName={folderName}
+          folderName={folderName ?? ""}
           onRename={handleRenameFolder}
           onDelete={handleDeleteFolder}
         />
       )}
-
       {/* 링크 로딩중이면 스켈레톤 */}
       {linksLoading ? (
         <div className={styles.cardGrid}>
@@ -173,11 +214,11 @@ export default function LinksPage() {
             <SkeletonList key={i} />
           ))}
         </div>
-      ) : links.length === 0 ? (
+      ) : filterLinks.length === 0 ? (
         <EmptyState />
       ) : (
         <div className={styles.cardGrid}>
-          {links.map((item) => (
+          {paginatedLinks.map((item) => (
             <LinkCard
               key={item.id}
               item={item}
@@ -187,13 +228,11 @@ export default function LinksPage() {
           ))}
         </div>
       )}
-
-      {/* 백그라운드 로딩 표시 */}
-      {/* {linksFetching && !linksLoading && (
-        <div className={styles.fetchingSpinner}>
-          <LoadingSpinner />
-        </div>
-      )} */}
+      <Pagination
+        currentPage={currentPage}
+        totalPages={Math.ceil(filterLinks.length / itemsPerPage)}
+        onPageChange={setCurrentPage}
+      />
     </div>
   );
 }

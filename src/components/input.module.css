@@ -43,6 +43,9 @@
   color: white;
   height: 54px;
 }
+.input_login .icon_right {
+  top: 26px;
+}
 
 .input_search {
   position: relative;

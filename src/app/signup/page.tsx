@@ -1,70 +1,171 @@
 "use client";
 
-import { useSearchParams, useRouter } from "next/navigation";
-import { useEffect } from "react";
-import { signupWithKakao, signinWithKakao } from "@/lib/auth";
+import styles from "./signup.module.css";
+import Image from "next/image";
+import logo from "@/images/logo.svg";
+import Input from "@/components/Input";
+import Button from "@/components/Button";
+import Link from "next/link";
+import clsx from "clsx";
+import { useState } from "react";
+import { fetchApi } from "@/lib/api";
+import { isValidEmail, isValidPassword } from "@/lib/validate";
+import toast from "react-hot-toast";
+import { useRouter } from "next/navigation";
 
-export default function KakaoCallbackPage() {
-  const searchParams = useSearchParams();
+export default function SignupPage() {
+  const [email, setEmail] = useState("");
+  const [name, setName] = useState("");
+  const [password, setPassword] = useState(""); //비밀번호
+  const [passwordCheck, setPasswordCheck] = useState(""); //비밀번호 확인
+
+  const [isEmailVaild, setIsEmailVaild] = useState(false);
+  const [errorText, setErrorText] = useState(""); //이메일 중복 확인용 에러 txt
+  const [passwordError, setPasswordError] = useState(""); //비밀번호 에러 txt
+  const [passwordCheckError, setPasswordCheckError] = useState(""); //비밀번호 확인 txt
+
   const router = useRouter();
 
-  useEffect(() => {
-    const code = searchParams.get("code");
-    console.log("🔥 Kakao code:", code);
+  const handleCheckEmail = async () => {
+    try {
+      const result = await fetchApi("/users/check-email", {
+        method: "POST",
+        body: JSON.stringify({ email }),
+      });
+      setIsEmailVaild(true);
+      if (result.isUsableEmail) {
+        setErrorText("");
+        toast.success("가입 가능한 메일입니다.");
+      }
+    } catch (error: any) {
+      setIsEmailVaild(false);
+      setErrorText(error.body?.message || "에러가 발생했습니다.");
+      // toast.error(error.body?.message || "에러가 발생했습니다.");
+    }
+  };
 
-    if (!code) {
-      alert("카카오 인가 코드가 없습니다.");
-      router.replace("/login");
+  const handlePasswordBlur = () => {
+    if (password && !isValidPassword(password)) {
+      setPasswordError("8자 이상 작성해 주세요.");
+    } else setPasswordError("");
+  };
+
+  const handlePasswordCheckBlur = () => {
+    if (
+      passwordCheck.length >= 1 &&
+      isValidPassword(password) &&
+      !(password === passwordCheck)
+    ) {
+      setPasswordCheckError("비밀번호가 일치하지 않습니다.");
+      return;
+    }
+    setPasswordCheckError("");
+  };
+
+  const handleSignup = (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+
+    if (!isEmailVaild) {
+      toast.error("이메일 중복 확인을 완료해주세요.");
       return;
     }
 
-    (async () => {
-      try {
-        // 🔥 1) 회원가입 여부 물어보기
-        const ok = confirm("카카오 계정으로 회원가입을 진행할까요?");
+    if (!name) {
+      toast.error("이름을 입력해 주세요.");
+      return;
+    }
 
-        if (!ok) {
-          alert("회원가입이 취소되었습니다.");
-          router.replace("/login");
-          return;
-        }
+    if (isValidPassword(password) && !(password === passwordCheck)) {
+      toast.error("비밀번호를 확인해 주세요.");
+      return;
+    }
 
-        // 🔥 2) 사용자 이름은 Kakao 프로필을 백엔드에서 가져오므로 프론트는 임시로 전달
-        const name = "카카오유저";
+    setPasswordCheckError("");
 
-        // 🔥 3) 백엔드 회원가입 요청 (token = code)
-        const signupRes = await signupWithKakao({
-          name,
-          token: code, // ← 여기!!
-          redirectUri: process.env.NEXT_PUBLIC_KAKAO_REDIRECT_URI!,
-        });
+    try {
+      console.log("성공");
+      const result = fetchApi(`/auth/sign-up`, {
+        method: "POST",
+        body: JSON.stringify({ email, password, name }),
+      });
+      console.log("가입결과", result);
+    } catch (error) {
+      console.error("가입중에러", error);
+    }
+    router.push("/login");
+  };
 
-        console.log("📤 signup result:", signupRes);
+  return (
+    <div className={styles.background}>
+      <div className={styles.box}>
+        <h1 className={styles.logo}>
+          <Image src={logo} alt="로고" fill />
+        </h1>
 
-        // 🔥 4) 로그인 요청 (token = code)
-        const loginRes = await signinWithKakao({
-          token: code,
-          redirectUri: process.env.NEXT_PUBLIC_KAKAO_REDIRECT_URI!,
-        });
+        <p className={clsx(styles.subText, "text_16_r")}>
+          이미 회원이신가요?{" "}
+          <Link href="/login" scroll={false}>
+            로그인 하기
+          </Link>
+        </p>
+        <form onSubmit={handleSignup}>
+          <label className={styles.label}>이메일</label>
+          <div className={styles.input_width_btn}>
+            <Input
+              className={styles.input}
+              size="login"
+              placeholder="이메일을 입력해주세요"
+              value={email}
+              error={errorText}
+              onChange={(e) => setEmail(e.target.value)}
+            />
+            <Button color="black" onClick={handleCheckEmail} type="button">
+              중복 확인
+            </Button>
+          </div>
 
-        console.log("📥 login result:", loginRes);
+          <label className={styles.label}>이름</label>
+          <Input
+            className={styles.input}
+            size="login"
+            placeholder="이름을 입력해주세요"
+            value={name}
+            onChange={(e) => setName(e.target.value)}
+          />
 
-        // 🔥 5) accessToken 저장 후 홈으로 이동
-        if (loginRes?.accessToken) {
-          alert("카카오 로그인 완료!");
-          localStorage.setItem("authToken", loginRes.accessToken);
-          router.replace("/");
-        } else {
-          alert("로그인 실패");
-          router.replace("/login");
-        }
-      } catch (err) {
-        console.error("❌ 카카오 인증 실패", err);
-        alert("카카오 인증 중 문제가 발생했습니다.");
-        router.replace("/login");
-      }
-    })();
-  }, []);
+          <label className={styles.label}>비밀번호</label>
+          <Input
+            className={styles.input}
+            size="login"
+            placeholder="비밀번호를 입력해주세요"
+            type="password"
+            value={password}
+            error={passwordError}
+            onChange={(e) => setPassword(e.target.value)}
+            onBlur={handlePasswordBlur}
+          />
 
-  return <div>카카오 인증 처리중...</div>;
+          <label className={styles.label}>비밀번호 확인</label>
+          <Input
+            className={styles.input}
+            size="login"
+            placeholder="비밀번호를 다시 입력해주세요"
+            type="password"
+            value={passwordCheck}
+            error={passwordCheckError}
+            onChange={(e) => setPasswordCheck(e.target.value)}
+            onBlur={handlePasswordCheckBlur}
+          />
+          <Button
+            className={styles.loginBtn}
+            size="full"
+            color="black"
+            type="submit"
+          >
+            회원가입
+          </Button>
+        </form>
+      </div>
+    </div>
+  );
 }

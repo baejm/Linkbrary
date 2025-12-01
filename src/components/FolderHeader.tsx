@@ -17,7 +17,7 @@ export default function FolderHeader({
   onDelete,
 }: FolderHeaderProps) {
   const [editing, setEditing] = useState(false);
-  const [name, setName] = useState(folderName);
+  const [name, setName] = useState(folderName ?? "");
 
   const handleShare = () => {
     const url = window.location.href;
