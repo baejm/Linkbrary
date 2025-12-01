@@ -16,16 +16,16 @@ bun dev
 Open [http://localhost:3000]((https://linkbrary-gilt.vercel.app/)) with your browser to see the result.
 Frontend
 
-*Next.js 14(App Router) / React 18
-JWT 기반 인증 및 토큰 만료 처리
-React Query 기반 서버 상태 관리 및 캐싱
-Custom Hooks (useLinks, useFolders, useDebounce)
-즐겨찾기 Optimistic Update
-폴더/링크 CRUD 기능
-Pagination & Debounce 검색 기능
-Skeleton UI / Empty State 처리
-URL SearchParams 기반 상태 동기화
-모달 컴포넌트 기반 폴더 관리 기능
+- Next.js 14(App Router) / React 18
+- JWT 기반 인증 및 토큰 만료 처리
+- React Query 기반 서버 상태 관리 및 캐싱
+- Custom Hooks (useLinks, useFolders, useDebounce)
+- 즐겨찾기 Optimistic Update
+- 폴더/링크 CRUD 기능
+- Pagination & Debounce 검색 기능
+- Skeleton UI / Empty State 처리
+- URL SearchParams 기반 상태 동기화
+- 모달 컴포넌트 기반 폴더 관리 기능
 
 1. React Query를 이용한 서버 상태 관리
 useQuery / useMutation 활용
