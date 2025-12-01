@@ -7,6 +7,9 @@ import starWhite from "@/images/star_white.svg";
 import star from "@/images/star.svg";
 import { useEffect, useRef, useState } from "react";
 import defaultThumb from "@/images/default_thumb.jpg";
+import Button from "./Button";
+import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
+import { fetchApi } from "@/lib/api";
 
 interface LinkCardProps {
   item: LinkItem;
@@ -17,6 +20,7 @@ interface LinkCardProps {
 export default function LinkCard({ item, onEdit, onDelete }: LinkCardProps) {
   const [openMenu, setOpenMenu] = useState(false);
   const menuRef = useRef<HTMLDivElement | null>(null);
+
   useEffect(() => {
     function handleClickOutside(e: MouseEvent) {
       if (menuRef.current && !menuRef.current.contains(e.target as Node)) {
@@ -32,6 +36,31 @@ export default function LinkCard({ item, onEdit, onDelete }: LinkCardProps) {
       document.removeEventListener("mousedown", handleClickOutside);
     };
   }, [openMenu]);
+
+  const queryClient = useQueryClient();
+
+  const { mutate, isPending } = useMutation({
+    mutationFn: (id: number) =>
+      fetchApi(`/links/${id}/favorite`, {
+        method: "PUT",
+        body: JSON.stringify({ favorite: !item.favorite }),
+      }),
+    onSuccess: () => {
+      //  페이지 새로고침
+      queryClient.invalidateQueries({ queryKey: ["favorites"] });
+
+      // links 페이지 데이터도 갱신
+      queryClient.invalidateQueries({ queryKey: ["links"] });
+    },
+  });
+
+  const [isFavorite, setIsFavorite] = useState(item.favorite);
+
+  const onToggleFavorite = (id: number) => {
+    setIsFavorite((prev) => !prev);
+    mutate(id);
+  };
+
   return (
     <div className={styles.card}>
       <div className={styles.thumbnailWrap}>
@@ -43,17 +72,24 @@ export default function LinkCard({ item, onEdit, onDelete }: LinkCardProps) {
         />
         <div className={styles.overlayTop} />
         <div className={styles.overlayBottom} />
-        {item.favorite ? (
-          <span className={styles.starIcon}>⭐️</span>
-        ) : (
-          <Image
-            src={starWhite}
-            alt="star"
-            width={22}
-            height={22}
-            className={styles.starIcon}
-          />
-        )}
+        <Button
+          onClick={() => {
+            onToggleFavorite(item.id);
+          }}
+          aria-label="즐겨찾기 토글"
+        >
+          {isFavorite ? (
+            <span className={styles.starIcon}>⭐️</span>
+          ) : (
+            <Image
+              src={starWhite}
+              alt="star"
+              width={22}
+              height={22}
+              className={styles.starIcon}
+            />
+          )}
+        </Button>
       </div>
 
       <div className={styles.info}>

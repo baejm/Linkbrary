@@ -47,7 +47,7 @@ const Nav = () => {
   };
 
   const handleClickLink = () => {
-    router.push("/share");
+    router.push("/favorite");
   };
 
   return (

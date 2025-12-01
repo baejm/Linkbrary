@@ -1,0 +1,34 @@
+.links_wrap {
+  margin: 64px auto 64px;
+  max-width: 1060px;
+}
+
+.list_wrap {
+  position: relative;
+}
+.list_wrap ul {
+  display: flex;
+  gap: 8px;
+  align-items: center;
+}
+.list_wrap ul li button {
+  height: 46px;
+}
+.list_wrap > button {
+  position: absolute;
+  right: 0;
+  top: 0;
+  height: 50px;
+}
+
+.cardGrid {
+  margin-top: 24px;
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+  gap: 24px;
+}
+.activeFolder {
+  background: var(--black);
+  color: var(--white);
+  border: none;
+}

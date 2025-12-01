@@ -2,7 +2,7 @@
   max-width: 1440px;
   background: var(--gray-200);
   padding: 32px 0 106px;
-  margin: 0 auto;
+  margin: 64px auto 0;
 }
 
 .footer_wrap .footer_list {

@@ -1,13 +1,6 @@
 "use client";
-declare module "next-auth" {
-  interface Session {
-    appToken?: string | null;
-    token?: {
-      access_token?: string | null;
-    };
-  }
-}
-import { useState } from "react";
+
+import { Suspense, useState } from "react";
 import { fetchApi } from "@/lib/api";
 import EmptyState from "@/components/EmptyState";
 import searchIco from "@/images/search_ico.svg";
@@ -28,7 +21,6 @@ import { useFolders } from "@/hooks/useFolders";
 import { useLinks } from "@/hooks/useLinks";
 import { useDebounce } from "@/hooks/useDebounce";
 import Pagination from "@/components/Pagination";
-// import { useSession } from "next-auth/react";
 
 interface LinksPageProps {
   searchParams: {
@@ -37,7 +29,7 @@ interface LinksPageProps {
   };
 }
 
-export default function LinksPage() {
+function LinksPageClient() {
   const [searchLink, setsearchLink] = useState("");
   const [selectedFolderId, setSelectedFolderId] = useState<number | "all">(
     "all"
@@ -234,5 +226,13 @@ export default function LinksPage() {
         onPageChange={setCurrentPage}
       />
     </div>
+  );
+}
+
+export default function LinksPage() {
+  return (
+    <Suspense fallback={<LoadingSpinner />}>
+      <LinksPageClient />
+    </Suspense>
   );
 }

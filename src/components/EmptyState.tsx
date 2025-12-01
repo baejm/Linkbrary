@@ -4,7 +4,11 @@
 import Image from "next/image";
 import styles from "./empty.module.css";
 
-export default function EmptyState() {
+interface EmptyProps {
+  txt?: string;
+}
+
+export default function EmptyState({ txt = "링크" }: EmptyProps) {
   return (
     <div className={styles.container}>
       <div className={styles.iconBox}>
@@ -17,7 +21,7 @@ export default function EmptyState() {
       </div>
 
       <h2 className={styles.title}>
-        저장된 <span className={styles.highlight}>링크</span>가 없어요
+        저장된 <span className={styles.highlight}>{txt}</span>가 없어요
       </h2>
 
       <p className={styles.desc}>
