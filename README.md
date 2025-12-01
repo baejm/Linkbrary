@@ -16,7 +16,7 @@ bun dev
 Open [http://localhost:3000]((https://linkbrary-gilt.vercel.app/)) with your browser to see the result.
 Frontend
 
-Next.js 14(App Router) / React 18
+*Next.js 14(App Router) / React 18
 JWT 기반 인증 및 토큰 만료 처리
 React Query 기반 서버 상태 관리 및 캐싱
 Custom Hooks (useLinks, useFolders, useDebounce)
