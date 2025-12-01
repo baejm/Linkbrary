@@ -13,80 +13,19 @@ pnpm dev
 bun dev
 ```
 
-Open [http://localhost:3000]([http://localhost:3000](https://linkbrary-gilt.vercel.app/)) with your browser to see the result.
+Open [http://localhost:3000]((https://linkbrary-gilt.vercel.app/)) with your browser to see the result.
 Frontend
 
 Next.js 14(App Router) / React 18
-
-React Query(TanStack Query) – 서버 상태 관리, Optimistic Update
-
-TypeScript – 타입 안전성 확보
-
-React Hooks: useState, useEffect, useRef, useSearchParams, useRouter
-
-Dynamic Routing, Client Components, Suspense Boundary 적용
-
-React Query 글로벌 캐싱 & 쿼리 무효화(invalidateQueries)
-
-Optimistic UI 업데이트(즐겨찾기 토글)
-
-Custom Hooks(useLinks, useFolders, useDebounce)
-
-Pagination 구현 (클라이언트 사이드 페이지네이션)
-
-Debounce 검색 기능 구현
-
-Error & Loading 상태 관리
-
-UI 구성요소 모듈화(LinkCard, FolderHeader, Pagination 등)
-
-API & Auth
-
-JWT 기반 인증 처리
-
-Access Token 만료 시 강제 로그아웃 처리
-
-fetch wrapper 함수(fetchApi) 커스터마이징
-
-REST API 기반 CRUD 구현 (폴더, 링크, 즐겨찾기)
-
-Favorite API 연동 & PUT 메서드 적용
-
-UI / UX
-
-Skeleton Loading UI
-
-Empty State 화면 구성
-
-모달 UI(폴더 수정/삭제/추가)
-
-Optimistic Update로 즉시 반응하는 UX 구성
-
-이미지 썸네일 처리 + Next/Image 최적화
-
-State & Business Logic
-
-React Query Mutations
-
-Folder/Links 상태 관리 분리
-
-리스트 필터링 및 검색
-
-클라이언트 사이드 파라미터 기반 UI 동기화
-
-기타 기술
-
-Vercel 배포
-
-Git / GitHub 협업
-
-ESLint / Prettier 설정
-
-파일 구조 설계(feature-based structure)
-
-TypeScript Domain Type 정의(LinkItem, Response 타입 등)
-
-
+JWT 기반 인증 및 토큰 만료 처리
+React Query 기반 서버 상태 관리 및 캐싱
+Custom Hooks (useLinks, useFolders, useDebounce)
+즐겨찾기 Optimistic Update
+폴더/링크 CRUD 기능
+Pagination & Debounce 검색 기능
+Skeleton UI / Empty State 처리
+URL SearchParams 기반 상태 동기화
+모달 컴포넌트 기반 폴더 관리 기능
 
 1. React Query를 이용한 서버 상태 관리
 useQuery / useMutation 활용
@@ -101,7 +40,7 @@ useLinks(folderId)
 useFolders()
 useDebounce(value)
 
-URL SearchParams를 통한 상태 동기화
+4. URL SearchParams를 통한 상태 동기화
 폴더 선택, router.push(/links?folder=${id}) ,새로고침해도 상태 유지
 
 5. Suspense Boundary로 CSR 관련 에러 해결
