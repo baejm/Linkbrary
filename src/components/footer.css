@@ -3,6 +3,8 @@
   background: var(--gray-200);
   padding: 32px 0 106px;
   margin: 64px auto 0;
+  width: 100%;
+  margin-top: auto;
 }
 
 .footer_wrap .footer_list {

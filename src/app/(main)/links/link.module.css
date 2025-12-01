@@ -1,6 +1,7 @@
 .links_wrap {
   margin: 64px auto 64px;
   max-width: 1060px;
+  width: 100%;
 }
 
 .list_wrap {

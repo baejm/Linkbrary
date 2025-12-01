@@ -73,52 +73,50 @@ const Header = () => {
   };
 
   return (
-    <div>
-      <header
-        className={clsx(
-          style.header_wrap,
-          pathname === "/" && style.header_wrap_big
-        )}
-      >
-        <Nav />
-        {pathname === "/" && (
-          <section>
-            <h2 className={clsx(style.title, "title txt_56")}>
-              <span className="txt_56_b">세상의 모든 정보</span>
-              <br />를 쉽게 저장하고 관리해 보세요
-            </h2>
-            <Button color="black" onClick={() => handleClickLink()}>
-              링크 추가하기
-            </Button>
-          </section>
-        )}
-        {pathname === "/links" && (
-          <section>
-            <h2 className={clsx(style.title, "title txt_32")}>
-              세상의 모든 정보, 필요한 순간에
-            </h2>
-            <div className="input_with_button">
-              <InputGroup
-                input={{
-                  size: "lg",
-                  placeholder: "링크를 추가해 보세요",
-                  iconLeft: link_wh,
-                  value: linkValue,
-                  onChange: (e) => setLinkValue(e.target.value),
-                }}
-                button={{
-                  size: "lg",
-                  color: "black",
-                  className: "txt_18_sm",
-                  text: "추가하기",
-                  onClick: handleAddLink,
-                }}
-              />
-            </div>
-          </section>
-        )}
-      </header>
-    </div>
+    <header
+      className={clsx(
+        style.header_wrap,
+        pathname === "/" && style.header_wrap_big
+      )}
+    >
+      <Nav />
+      {pathname === "/" && (
+        <section>
+          <h2 className={clsx(style.title, "title txt_56")}>
+            <span className="txt_56_b">세상의 모든 정보</span>
+            <br />를 쉽게 저장하고 관리해 보세요
+          </h2>
+          <Button color="black" onClick={() => handleClickLink()}>
+            링크 추가하기
+          </Button>
+        </section>
+      )}
+      {pathname === "/links" && (
+        <section>
+          <h2 className={clsx(style.title, "title txt_32")}>
+            세상의 모든 정보, 필요한 순간에
+          </h2>
+          <div className="input_with_button">
+            <InputGroup
+              input={{
+                size: "lg",
+                placeholder: "링크를 추가해 보세요",
+                iconLeft: link_wh,
+                value: linkValue,
+                onChange: (e) => setLinkValue(e.target.value),
+              }}
+              button={{
+                size: "lg",
+                color: "black",
+                className: "txt_18_sm",
+                text: "추가하기",
+                onClick: handleAddLink,
+              }}
+            />
+          </div>
+        </section>
+      )}
+    </header>
   );
 };
 
