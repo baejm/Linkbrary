@@ -11,6 +11,8 @@ import { isValidEmail, isValidPassword } from "@/lib/validate";
 import { fetchApi } from "@/lib/api";
 import { saveToken } from "@/lib/token";
 import { useRouter } from "next/navigation";
+import { useMutation, useQuery } from "@tanstack/react-query";
+import { LoadingSpinner } from "@/components/loading/LoadingSpinner";
 
 export default function LoginPage() {
   const [email, setEmail] = useState("");
@@ -46,20 +48,22 @@ export default function LoginPage() {
     } else setPasswordError("");
   };
 
-  const handleLogin = async (e: React.FormEvent<HTMLFormElement>) => {
-    e.preventDefault();
-
-    try {
-      const user = await fetchApi("/auth/sign-in", {
+  const loginMutation = useMutation({
+    mutationFn: (body: { email: string; password: string }) =>
+      fetchApi("/auth/sign-in", {
         method: "POST",
-        body: JSON.stringify({ email, password }),
-      });
-
+        body: JSON.stringify(body),
+      }),
+    onSuccess: (user) => {
       saveToken(user.accessToken);
       router.push("/");
-    } catch (err) {
-      alert("이메일 또는 비밀번호 오류");
-    }
+    },
+    onError: () => alert("이메일 또는 비밀번호 오류"),
+  });
+
+  const handleLogin = async (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+    loginMutation.mutate({ email, password });
   };
 
   return (
@@ -101,13 +105,13 @@ export default function LoginPage() {
           </div>
 
           <Button
-            disabled={!checkValid}
+            disabled={!checkValid || loginMutation.isPending}
             className={styles.loginBtn}
             size="full"
             color="black"
             type="submit"
           >
-            로그인
+            {loginMutation.isPending ? "로그인 중 ..." : "로그인"}
           </Button>
         </form>
       </div>
