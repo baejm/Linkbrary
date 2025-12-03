@@ -3,13 +3,13 @@
 import styles from "./login.module.css";
 import Image from "next/image";
 import logo from "@/images/logo.svg";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import clsx from "clsx";
 import Input from "@/components/Input";
 import Button from "@/components/Button";
 import { isValidEmail, isValidPassword } from "@/lib/validate";
 import { fetchApi } from "@/lib/api";
-import { saveToken } from "@/lib/token";
+import { isLoggedIn, saveToken } from "@/lib/token";
 import { useRouter } from "next/navigation";
 import { useMutation, useQuery } from "@tanstack/react-query";
 import { LoadingSpinner } from "@/components/loading/LoadingSpinner";
@@ -24,6 +24,12 @@ export default function LoginPage() {
   const [checkValid, setCheckValid] = useState(false);
 
   const router = useRouter();
+
+  useEffect(() => {
+    if (isLoggedIn()) {
+      router.replace("/");
+    }
+  }, []);
 
   const handleEmailChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const value = e.target.value;

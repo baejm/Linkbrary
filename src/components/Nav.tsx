@@ -20,6 +20,7 @@ const Nav = () => {
 
   // 최초 로딩 + 새로고침 시 로그인 상태 반영
   useEffect(() => {
+    window.scrollTo(0, 0);
     const hasToken = isLoggedIn();
     setLoggedIn(hasToken);
 
@@ -54,7 +55,7 @@ const Nav = () => {
     <nav className={style.gnb}>
       <div className={style.gnb_top}>
         <h1>
-          <Link href="/" scroll={false}>
+          <Link href="/">
             <Image src={logo} alt="로고" />
           </Link>
         </h1>
@@ -95,27 +96,27 @@ const Nav = () => {
             </>
           )}
         </div>
-        <div className={style.nav_info}>
-          {loggedIn && remain !== null && (
-            <>
-              <div className={style.session_warning}>
-                <b>
-                  {hours > 0 && `${hours}시간 `}
-                  {minutes}분 {seconds.toString().padStart(2, "0")}초
-                </b>
-              </div>
+      </div>
+      <div className={style.nav_info}>
+        {loggedIn && remain !== null && (
+          <>
+            <div className={style.session_warning}>
+              <b>
+                {hours > 0 && `${hours}시간 `}
+                {minutes}분 {seconds.toString().padStart(2, "0")}초
+              </b>
+            </div>
 
-              <Button
-                className={clsx(style.logout, "txt_18_sm")}
-                size="sm"
-                color="trans"
-                onClick={handleLogout}
-              >
-                로그아웃
-              </Button>
-            </>
-          )}
-        </div>
+            <Button
+              className={clsx(style.logout, "txt_18_sm")}
+              size="sm"
+              color="trans"
+              onClick={handleLogout}
+            >
+              로그아웃
+            </Button>
+          </>
+        )}
       </div>
     </nav>
   );

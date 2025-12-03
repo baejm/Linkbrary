@@ -76,7 +76,7 @@ function LinksPageClient() {
 
   //페이지네이션 관련
   const [currentPage, setCurrentPage] = useState(1);
-  const itemsPerPage = 2;
+  const itemsPerPage = 3;
 
   const start = (currentPage - 1) * itemsPerPage;
   const end = start + itemsPerPage;
