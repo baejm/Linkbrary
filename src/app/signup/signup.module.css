@@ -1,10 +1,11 @@
 .background {
   width: 100%;
-  height: 100vh;
+  min-height: 100vh;
   display: flex;
   justify-content: center;
   align-items: center;
   background: url("/images/bg_login.png") no-repeat 0 0 / cover;
+  padding: 50px 0;
 }
 
 .box {
@@ -120,4 +121,30 @@
   border-radius: 5px;
   padding: 9px 12px;
   font-size: 12px;
+}
+
+.socialSection {
+  margin-top: 30px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  background: rgba(30, 30, 30, 0.8);
+  border-radius: 10px;
+  width: 100%;
+  height: 66px;
+  padding: 0 24px;
+}
+
+.socialTitle {
+  font-size: 14px;
+  color: var(--white);
+}
+
+.kakaoBtn {
+  width: 42px;
+  height: 42px;
+  background: #fee500;
+  border: none;
+  border-radius: 50%;
+  cursor: pointer;
 }

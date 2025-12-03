@@ -1,62 +1,79 @@
 import { NextResponse } from "next/server";
 
 export async function GET(request: Request) {
-  const { searchParams } = new URL(request.url);
-  const code = searchParams.get("code");
+  const url = new URL(request.url);
+  const code = url.searchParams.get("code");
+
+  console.log("== route.ts 시작 ==");
+  console.log("받은 인가코드:", code);
 
   if (!code) {
-    return NextResponse.json({ message: "인가코드 없음" }, { status: 400 });
+    return NextResponse.json({ error: "인가코드 없음" }, { status: 400 });
   }
 
-  const redirectUri = "http://localhost:3000/api/auth/kakao";
   const teamId = process.env.NEXT_PUBLIC_TEAM_ID!;
-  const REST_API_KEY = process.env.KAKAO_REST_API!; // ⭐ 서버용 키 사용
+  const API = process.env.NEXT_PUBLIC_API_BASE_URL!;
+  const redirectUri = process.env.NEXT_PUBLIC_KAKAO_REDIRECT_URI!;
 
-  // 1) 카카오 토큰 교환
-  const tokenRes = await fetch("https://kauth.kakao.com/oauth/token", {
+  console.log("사용 redirectUri:", redirectUri);
+  console.log("teamId:", teamId);
+
+  // 1) 로그인 시도
+  console.log("---- sign-in 요청 ----");
+  const signInRes = await fetch(`${API}/${teamId}/auth/sign-in/kakao`, {
     method: "POST",
-    headers: {
-      "Content-Type": "application/x-www-form-urlencoded;charset=utf-8",
-    },
-    body: new URLSearchParams({
-      grant_type: "authorization_code",
-      client_id: REST_API_KEY, // ⭐ undefined 문제 해결됨
-      redirect_uri: redirectUri,
-      code,
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({
+      token: code,
+      redirectUri,
     }),
   });
 
-  const tokenData = await tokenRes.json();
+  console.log("sign-in status:", signInRes.status);
+  const signInData = await signInRes.json();
+  console.log("sign-in 응답:", signInData);
 
-  if (!tokenData.access_token) {
-    console.log("카카오 응답:", tokenData);
+  // server 응답이 access_token옴
+  const accessToken = signInData.accessToken ?? signInData.access_token ?? null;
+
+  if (signInRes.ok && accessToken) {
+    console.log("로그인 성공 → callback 리다이렉트");
+    return NextResponse.redirect(
+      `http://localhost:3000/oauth/callback?access=${accessToken}`
+    );
+  }
+
+  // 2) 회원가입 시도
+  console.log("로그인 실패 → 회원가입 시도");
+  console.log("---- sign-up 요청 ----");
+
+  const signUpRes = await fetch(`${API}/${teamId}/auth/sign-up/kakao`, {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({
+      token: code,
+      redirectUri,
+    }),
+  });
+
+  console.log("sign-up status:", signUpRes.status);
+  const signUpData = await signUpRes.json();
+  console.log("sign-up 응답:", signUpData);
+
+  const signUpAccessToken =
+    signUpData.accessToken ?? signUpData.access_token ?? null;
+
+  if (!signUpRes.ok || !signUpAccessToken) {
+    console.log("회원가입 실패!");
     return NextResponse.json(
-      { error: "카카오 토큰 발급 실패" },
+      { error: "카카오 회원가입 실패" },
       { status: 500 }
     );
   }
 
-  // 2) Linkbrary 서버 로그인
-  const res = await fetch(
-    `${process.env.NEXT_PUBLIC_API_BASE_URL}/${teamId}/auth/sign-in/kakao`,
-    {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({
-        token: tokenData.access_token,
-        redirectUri,
-      }),
-    }
-  );
-
-  const data = await res.json();
-
-  if (!res.ok || !data.accessToken) {
-    console.log("백엔드 응답:", data);
-    return NextResponse.json({ error: "로그인 실패" }, { status: 500 });
-  }
+  console.log("회원가입 성공 → callback 리다이렉트");
 
   return NextResponse.redirect(
-    `http://localhost:3000/oauth/callback?access=${data.accessToken}`
+    `http://localhost:3000/oauth/callback?access=${signUpAccessToken}`
   );
 }
