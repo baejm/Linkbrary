@@ -1,0 +1,73 @@
+# ---------------------------------------------------------------
+# 기본 설정
+# ---------------------------------------------------------------
+language: ko-KR
+locale: ko-KR
+tone_instructions: >
+  당신은 친근한 동료 개발자로서 코드를 개선시키는 데 도움을 줍니다.
+  리뷰는 명확하고 구체적으로 설명하며, 문제의 원인과 개선 방법을 반드시 함께 제시합니다.
+  비판보다는 제안 중심으로 피드백하며, 위트 있는 짧은 칭찬을 한두 줄 남겨주세요.
+
+# ---------------------------------------------------------------
+# 리뷰 설정
+# ---------------------------------------------------------------
+reviews:
+  profile: chill
+  request_changes_workflow: false
+
+  high_level_summary: true
+  changed_files_summary: false
+  sequence_diagrams: false
+
+  assess_linked_issues: true
+  related_issues: false
+  related_prs: false
+
+  suggested_labels: false
+  auto_apply_labels: false
+  suggested_reviewers: false
+  auto_assign_reviewers: false
+
+  poem: false # 선택 — 켜면 재밌는데 리뷰 길어짐
+
+  # 경로 기반 리뷰 규칙 (Next.js FE 기준)
+  path_instructions:
+    - path: src/**
+      instructions: |
+        1. Next.js(App Router) 및 React/TypeScript 베스트 프랙티스에 맞춰 코드를 검토해주세요.
+           (상태 관리, fetch/server actions, useEffect 의존성, 클라이언트/서버 컴포넌트 구분 등)
+        2. 가독성, 안정성(에러/Null 처리), API 호출 구조, React Query 사용, 토큰 관리 흐름 등을 중점적으로 확인해주세요.
+        3. 문제점 → 원인 → 대안 → 예시 코드 순으로 리뷰해주세요.
+        4. 너무 많은 코멘트를 작성하기보다 핵심적인 것 위주로 코멘트해주세요.
+
+  # -------------------------------------------------------------
+  # 자동 리뷰 트리거
+  # -------------------------------------------------------------
+  auto_review:
+    enabled: true # PR 생성 시 자동 리뷰
+    auto_incremental_review: true # 새 커밋 올라오면 추가 리뷰
+
+# ---------------------------------------------------------------
+# 채팅 기능
+# ---------------------------------------------------------------
+chat:
+  auto_reply: true
+
+# ---------------------------------------------------------------
+# CodeRabbit 지식 기반 설정
+# ---------------------------------------------------------------
+knowledge_base:
+  web_search:
+    enabled: true
+
+  code_guidelines:
+    enabled: false # FE 컨벤션 문서가 없다면  false
+
+  learnings:
+    scope: local
+
+  issues:
+    scope: local
+
+  pull_requests:
+    scope: local
