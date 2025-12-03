@@ -12,6 +12,7 @@ import { fetchApi } from "@/lib/api";
 import { isValidEmail, isValidPassword } from "@/lib/validate";
 import toast from "react-hot-toast";
 import { useRouter } from "next/navigation";
+import kakaoIcon from "@/images/kakao_sns.svg";
 
 export default function SignupPage() {
   const [email, setEmail] = useState("");
@@ -95,6 +96,16 @@ export default function SignupPage() {
     router.push("/login");
   };
 
+  const handleKakaoLogin = () => {
+    const REST_API_KEY = process.env.NEXT_PUBLIC_KAKAO_REST_API!;
+    const redirectUri = process.env.NEXT_PUBLIC_KAKAO_REDIRECT_URI!;
+    // const redirectUri = `https://linkbrary-api.vercel.app/12/oauth/kakao`;
+
+    const kakaoURL = `https://kauth.kakao.com/oauth/authorize?response_type=code&client_id=${REST_API_KEY}&redirect_uri=${redirectUri}`;
+
+    window.location.href = kakaoURL;
+  };
+
   return (
     <div className={styles.background}>
       <div className={styles.box}>
@@ -165,6 +176,19 @@ export default function SignupPage() {
             회원가입
           </Button>
         </form>
+        <div className={styles.socialSection}>
+          <span className={clsx(styles.socialTitle, "text_14_r")}>
+            소셜 로그인
+          </span>
+
+          <Button
+            className={styles.kakaoBtn}
+            color=""
+            onClick={handleKakaoLogin}
+          >
+            <Image src={kakaoIcon} width={42} height={42} alt="kakao" />
+          </Button>
+        </div>
       </div>
     </div>
   );

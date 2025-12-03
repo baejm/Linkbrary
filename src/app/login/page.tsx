@@ -13,6 +13,7 @@ import { saveToken } from "@/lib/token";
 import { useRouter } from "next/navigation";
 import { useMutation, useQuery } from "@tanstack/react-query";
 import { LoadingSpinner } from "@/components/loading/LoadingSpinner";
+import kakaoIcon from "@/images/kakao_sns.svg";
 
 export default function LoginPage() {
   const [email, setEmail] = useState("");
@@ -66,6 +67,16 @@ export default function LoginPage() {
     loginMutation.mutate({ email, password });
   };
 
+  const handleKakaoLogin = () => {
+    const REST_API_KEY = process.env.NEXT_PUBLIC_KAKAO_REST_API!;
+    const redirectUri = process.env.NEXT_PUBLIC_KAKAO_REDIRECT_URI!;
+    // const redirectUri = `https://linkbrary-api.vercel.app/12/oauth/kakao`;
+
+    const kakaoURL = `https://kauth.kakao.com/oauth/authorize?response_type=code&client_id=${REST_API_KEY}&redirect_uri=${redirectUri}`;
+
+    window.location.href = kakaoURL;
+  };
+
   return (
     <div className={styles.background}>
       <div className={styles.box}>
@@ -114,6 +125,19 @@ export default function LoginPage() {
             {loginMutation.isPending ? "로그인 중 ..." : "로그인"}
           </Button>
         </form>
+        <div className={styles.socialSection}>
+          <span className={clsx(styles.socialTitle, "text_14_r")}>
+            소셜 로그인
+          </span>
+
+          <Button
+            className={styles.kakaoBtn}
+            color=""
+            onClick={handleKakaoLogin}
+          >
+            <Image src={kakaoIcon} width={42} height={42} alt="kakao" />
+          </Button>
+        </div>
       </div>
     </div>
   );
