@@ -4,7 +4,7 @@ import { useRouter, useSearchParams } from "next/navigation";
 import { useEffect } from "react";
 import { saveToken } from "@/lib/token";
 
-export default function OAuthCallbackPage() {
+export default function OAuthRedirectClient() {
   const params = useSearchParams();
   const router = useRouter();
 
@@ -13,9 +13,9 @@ export default function OAuthCallbackPage() {
 
     if (access) {
       saveToken(access);
-      router.push("/");
+      router.replace("/");
     } else {
-      router.push("/login");
+      router.replace("/login");
     }
   }, []);
 
